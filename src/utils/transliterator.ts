@@ -26,38 +26,41 @@ const vowelMap: TransliterationMap = {
 };
 
 const consonantMap: TransliterationMap = {
-  'k': 'క',
+  'kSha': 'క్ష',
+  'x': 'క్ష',
   'kh': 'ఖ',
-  'g': 'గ',
-  'gh': 'ఘ',
-  'ng': 'ఙ',
   'ch': 'చ',
   'chh': 'ఛ',
-  'j': 'జ',
   'jh': 'ఝ',
-  'ny': 'ఞ',
-  'T': 'ట',
   'Th': 'ఠ',
-  'D': 'డ',
   'Dh': 'ఢ',
+  'th': 'థ',
+  'dh': 'ధ',
+  'ph': 'ఫ',
+  'bh': 'భ',
+  'gh': 'ఘ',
+  'ng': 'ఙ',
+  'ny': 'ఞ',
+  'sh': 'శ',
+  'Sha': 'ష',
+  'Sh': 'ష',
+  'k': 'క',
+  'g': 'గ',
+  'j': 'జ',
+  'T': 'ట',
+  'D': 'డ',
   'N': 'ణ',
   't': 'త',
-  'th': 'థ',
   'd': 'ద',
-  'dh': 'ధ',
   'n': 'న',
   'p': 'ప',
-  'ph': 'ఫ',
   'b': 'బ',
-  'bh': 'భ',
   'm': 'మ',
   'y': 'య',
   'r': 'ర',
   'l': 'ల',
   'v': 'వ',
   'w': 'వ',
-  'sh': 'శ',
-  'Sh': 'ష',
   's': 'స',
   'h': 'హ',
   'L': 'ళ',
@@ -85,6 +88,8 @@ const matraMap: TransliterationMap = {
 };
 
 export class Transliterator {
+  private nJoinConsonants = ['k', 'g', 'ch', 'j', 't', 'd', 'p', 'b', 'm', 'y', 'r', 'l', 'sh', 's', 'h', 'T', 'D'];
+  
   transliterate(input: string): string {
     if (!input) return '';
     
@@ -95,9 +100,21 @@ export class Transliterator {
     while (i < text.length) {
       let matched = false;
       
-      // Try to match longer sequences first
-      for (let len = 3; len >= 1; len--) {
+      // Try to match longer sequences first (up to 4 for kSha)
+      for (let len = 4; len >= 1; len--) {
         const substr = text.substr(i, len);
+        
+        // Special handling for 'n' joins
+        if (substr === 'n' && i + 1 < text.length) {
+          const nextChar = this.getNextConsonant(text, i + 1);
+          if (nextChar && this.nJoinConsonants.some(cons => nextChar.startsWith(cons))) {
+            // Use anusvara (ం) for n-joins before certain consonants
+            result += 'ం';
+            i += 1;
+            matched = true;
+            break;
+          }
+        }
         
         // Check for consonant + vowel combinations
         if (len > 1) {
@@ -152,6 +169,17 @@ export class Transliterator {
     }
     
     return result;
+  }
+  
+  private getNextConsonant(text: string, startIndex: number): string | null {
+    // Find the next consonant starting from startIndex
+    for (let len = 4; len >= 1; len--) {
+      const substr = text.substr(startIndex, len);
+      if (consonantMap.hasOwnProperty(substr)) {
+        return substr;
+      }
+    }
+    return null;
   }
 }
 
