@@ -176,6 +176,31 @@ export const TeluguWordle = () => {
               onSubmit={handleSubmitGuess}
               disabled={gameOver}
             />
+            
+            {/* Hint Area - positioned near input to avoid scrolling */}
+            {(hasCorrectCells() || hasYellowCells()) && (
+              <div className="text-center mt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={showHint}
+                  className="text-xs py-1 px-2"
+                >
+                  💡 Hint?
+                </Button>
+              </div>
+            )}
+            
+            {/* Message Area - also near input */}
+            {hintMessage && (
+              <div className="max-w-xs mx-auto mt-2">
+                <Alert className="border-primary/20 bg-primary/5 p-2">
+                  <AlertDescription className="text-center font-telugu text-xs">
+                    {hintMessage}
+                  </AlertDescription>
+                </Alert>
+              </div>
+            )}
           </div>
         )}
 
@@ -189,31 +214,6 @@ export const TeluguWordle = () => {
               currentRow={guesses.length}
             />
             
-            
-            {/* Hint Area - positioned to avoid scrolling */}
-            {(hasCorrectCells() || hasYellowCells()) && !gameOver && (
-              <div className="text-center mt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={showHint}
-                  className="text-xs py-1 px-2"
-                >
-                  💡 Hint?
-                </Button>
-              </div>
-            )}
-            
-            {/* Message Area */}
-            {hintMessage && (
-              <div className="max-w-xs mx-auto mt-2">
-                <Alert className="border-primary/20 bg-primary/5 p-2">
-                  <AlertDescription className="text-center font-telugu text-xs">
-                    {hintMessage}
-                  </AlertDescription>
-                </Alert>
-              </div>
-            )}
           </div>
 
           {/* Detailed Legend on Right Side for larger screens */}
