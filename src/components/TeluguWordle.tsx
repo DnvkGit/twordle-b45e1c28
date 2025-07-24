@@ -189,24 +189,6 @@ export const TeluguWordle = () => {
               currentRow={guesses.length}
             />
             
-            {/* Compact Color Legend for mobile */}
-            <div className="lg:hidden mt-2 text-center">
-              <div className="text-xs font-medium mb-1">Colors:</div>
-              <div className="flex justify-center gap-2 text-xs flex-wrap">
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-correct rounded"></div>
-                  <span>✓</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-present rounded"></div>
-                  <span>Wrong Pos</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-absent rounded"></div>
-                  <span>No</span>
-                </div>
-              </div>
-            </div>
             
             {/* Hint Area - positioned to avoid scrolling */}
             {(hasCorrectCells() || hasYellowCells()) && !gameOver && (

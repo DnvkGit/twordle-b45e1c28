@@ -54,7 +54,7 @@ export const InputArea = ({ onSubmit, disabled }: InputAreaProps) => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={handleKeyPress}
-            placeholder="vinOdamu → వినోదము"
+            placeholder="Enter in English for ex: vinOdamu → వినోదము"
             disabled={disabled}
             className="bg-background/50 border-border focus:border-primary text-sm"
           />

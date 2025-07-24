@@ -93,8 +93,8 @@ export const GameGrid = ({ guesses, currentGuess, answer, currentRow }: GameGrid
               <div
                 key={colIndex}
                 className={`
-                  w-10 h-10 border-2 rounded flex items-center justify-center
-                  font-telugu font-semibold text-sm transition-all duration-300
+                  w-12 h-12 border-2 rounded flex items-center justify-center
+                  font-telugu font-semibold text-base transition-all duration-300
                   ${getCellColor(cellState)}
                   ${isCurrentRow && !hasGuess ? 'ring-1 ring-primary/30' : ''}
                 `}
