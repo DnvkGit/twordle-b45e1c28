@@ -76,9 +76,9 @@ export const GameGrid = ({ guesses, currentGuess, answer, currentRow }: GameGrid
   };
 
   return (
-    <div className="grid grid-rows-10 gap-2 p-4 max-w-sm mx-auto">
+    <div className="grid grid-rows-10 gap-1 p-2 max-w-xs mx-auto">
       {Array.from({ length: ROWS }, (_, rowIndex) => (
-        <div key={rowIndex} className="grid grid-cols-4 gap-2">
+        <div key={rowIndex} className="grid grid-cols-4 gap-1">
           {Array.from({ length: COLS }, (_, colIndex) => {
             const isCurrentRow = rowIndex === currentRow;
             const hasGuess = rowIndex < guesses.length;
@@ -93,10 +93,10 @@ export const GameGrid = ({ guesses, currentGuess, answer, currentRow }: GameGrid
               <div
                 key={colIndex}
                 className={`
-                  aspect-square border-2 rounded-lg flex items-center justify-center
-                  font-telugu font-semibold text-lg transition-all duration-300
+                  w-10 h-10 border-2 rounded flex items-center justify-center
+                  font-telugu font-semibold text-sm transition-all duration-300
                   ${getCellColor(cellState)}
-                  ${isCurrentRow && !hasGuess ? 'ring-2 ring-primary/30' : ''}
+                  ${isCurrentRow && !hasGuess ? 'ring-1 ring-primary/30' : ''}
                 `}
               >
                 <span className="text-center leading-none">

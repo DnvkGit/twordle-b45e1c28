@@ -168,10 +168,10 @@ export const TeluguWordle = () => {
         onToggleLevel={() => setGameLevel(gameLevel === 'AMATEUR' ? 'PRO' : 'AMATEUR')}
       />
       
-      <div className="container mx-auto py-4">
+      <div className="container mx-auto py-2 px-2">
         {/* Input Area at Top */}
         {!gameOver && (
-          <div className="mb-6">
+          <div className="mb-2">
             <InputArea
               onSubmit={handleSubmitGuess}
               disabled={gameOver}
@@ -179,7 +179,7 @@ export const TeluguWordle = () => {
           </div>
         )}
 
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col lg:flex-row gap-2">
           {/* Main Game Area */}
           <div className="flex-1">
             <GameGrid
@@ -189,11 +189,44 @@ export const TeluguWordle = () => {
               currentRow={guesses.length}
             />
             
+            {/* Compact Color Legend for mobile */}
+            <div className="lg:hidden mt-2 text-center">
+              <div className="text-xs font-medium mb-1">Colors:</div>
+              <div className="flex justify-center gap-2 text-xs flex-wrap">
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-correct rounded"></div>
+                  <span>✓</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-present rounded"></div>
+                  <span>Wrong Pos</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 bg-absent rounded"></div>
+                  <span>No</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Hint Area - positioned to avoid scrolling */}
+            {(hasCorrectCells() || hasYellowCells()) && !gameOver && (
+              <div className="text-center mt-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={showHint}
+                  className="text-xs py-1 px-2"
+                >
+                  💡 Hint?
+                </Button>
+              </div>
+            )}
+            
             {/* Message Area */}
             {hintMessage && (
-              <div className="max-w-sm mx-auto mt-4">
-                <Alert className="border-primary/20 bg-primary/5">
-                  <AlertDescription className="text-center font-telugu">
+              <div className="max-w-xs mx-auto mt-2">
+                <Alert className="border-primary/20 bg-primary/5 p-2">
+                  <AlertDescription className="text-center font-telugu text-xs">
                     {hintMessage}
                   </AlertDescription>
                 </Alert>
@@ -201,45 +234,45 @@ export const TeluguWordle = () => {
             )}
           </div>
 
-          {/* Legend on Right Side for larger screens */}
-          <div className="hidden lg:block w-80">
-            <div className="bg-gradient-card rounded-xl p-4 border border-border">
-              <h3 className="font-semibold mb-3 text-sm text-center">Color Legend</h3>
-              <div className="space-y-2 text-xs">
+          {/* Detailed Legend on Right Side for larger screens */}
+          <div className="hidden lg:block w-72">
+            <div className="bg-gradient-card rounded-lg p-3 border border-border">
+              <h3 className="font-semibold mb-2 text-xs text-center">Color Legend</h3>
+              <div className="space-y-1 text-xs">
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-correct rounded-sm flex-shrink-0"></div>
+                  <div className="w-3 h-3 bg-correct rounded-sm flex-shrink-0"></div>
                   <span className="text-muted-foreground">All OK</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-pink-light rounded-sm flex-shrink-0"></div>
+                  <div className="w-3 h-3 bg-pink-light rounded-sm flex-shrink-0"></div>
                   <span className="text-muted-foreground">Pos OK - Gunintam Wrong</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-purple rounded-sm flex-shrink-0"></div>
+                  <div className="w-3 h-3 bg-purple rounded-sm flex-shrink-0"></div>
                   <span className="text-muted-foreground">Pos OK - Samyuktakshara Wrong</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-present rounded-sm flex-shrink-0"></div>
+                  <div className="w-3 h-3 bg-present rounded-sm flex-shrink-0"></div>
                   <span className="text-muted-foreground">Pos Not OK - Syllable OK</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-blue-light rounded-sm flex-shrink-0"></div>
+                  <div className="w-3 h-3 bg-blue-light rounded-sm flex-shrink-0"></div>
                   <span className="text-muted-foreground">Pos Not OK - Gunintam Wrong</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-brown-accent rounded-sm flex-shrink-0"></div>
+                  <div className="w-3 h-3 bg-brown-accent rounded-sm flex-shrink-0"></div>
                   <span className="text-muted-foreground">Pos Not OK - Samyuktakshara Wrong</span>
                 </div>
               </div>
               
               {/* Game Mode Indicator */}
               {gameMode === 'HISTORY' && (
-                <div className="mt-4 pt-4 border-t border-border">
+                <div className="mt-3 pt-3 border-t border-border">
                   <Button 
                     variant="outline" 
                     size="sm" 
                     onClick={handleBackToToday}
-                    className="w-full"
+                    className="w-full text-xs"
                   >
                     Back to Today
                   </Button>

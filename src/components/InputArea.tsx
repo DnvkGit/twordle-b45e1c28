@@ -46,45 +46,33 @@ export const InputArea = ({ onSubmit, disabled }: InputAreaProps) => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-4 space-y-4">
-      <div className="bg-gradient-card rounded-xl p-6 border border-border shadow-elegant">
-        <div className="space-y-4">
-          <div>
-            <label htmlFor="word-input" className="block text-sm font-medium text-muted-foreground mb-2">
-              Enter word in English
-            </label>
-            <Input
-              id="word-input"
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type in English..."
-              disabled={disabled}
-              className="bg-background/50 border-border focus:border-primary"
-            />
-          </div>
+    <div className="max-w-md mx-auto p-2 space-y-2">
+      <div className="bg-gradient-card rounded-lg p-3 border border-border">
+        <div className="space-y-2">
+          <Input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="vinOdamu → వినోదము"
+            disabled={disabled}
+            className="bg-background/50 border-border focus:border-primary text-sm"
+          />
           
           {teluguPreview && (
-            <div className="bg-background/30 rounded-lg p-3 border border-border">
-              <p className="text-xs text-muted-foreground mb-1">Telugu Preview:</p>
-              <p className="font-telugu text-xl text-foreground">{teluguPreview}</p>
+            <div className="bg-background/30 rounded p-2 border border-border">
+              <p className="font-telugu text-lg text-foreground">{teluguPreview}</p>
             </div>
           )}
           
           <Button
             onClick={handleSubmit}
             disabled={disabled || !input.trim()}
-            className="w-full bg-gradient-button hover:shadow-glow transition-all duration-300"
+            className="w-full bg-gradient-button hover:shadow-glow transition-all duration-300 text-sm py-1"
           >
-            Submit Guess
+            Submit
           </Button>
         </div>
-      </div>
-      
-      <div className="text-center text-sm text-muted-foreground">
-        <p>Type Telugu words using English letters</p>
-        <p className="text-xs mt-1">Example: "vinOdamu" → "వినోదము"</p>
       </div>
     </div>
   );

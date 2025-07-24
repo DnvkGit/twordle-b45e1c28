@@ -108,99 +108,108 @@ export class Transliterator {
     while (i < text.length) {
       let matched = false;
       
-      // Try to match longer sequences first (up to 4 for kSha)
-      for (let len = 4; len >= 1; len--) {
-        const substr = text.substr(i, len);
-        
-        // Special handling for 'M' at the end of word as anusvara
-        if (substr === 'M' && (i + 1 >= text.length || text[i + 1] === ' ')) {
-          result += 'ం';
-          i += 1;
-          matched = true;
-          break;
-        }
-        
-        // Special handling for R+vowel combinations (dRi -> దృ)
-        if (len >= 3 && substr.startsWith('R') && substr.length >= 2) {
-          const vowelPart = substr.substring(1);
-          if (matraMap.hasOwnProperty(vowelPart)) {
-            result += 'ర్' + matraMap[vowelPart];
-            i += substr.length;
-            matched = true;
-            break;
-          }
-        }
-        
-        // Check for consonant+Ri combinations (dRi -> దృ)
-        if (len >= 3) {
-          for (const [cons, teluguCons] of Object.entries(consonantMap)) {
-            if (substr.startsWith(cons) && substr.length >= cons.length + 2) {
-              const remainder = substr.substring(cons.length);
-              if (remainder.startsWith('Ri')) {
-                result += teluguCons + 'ృ';
-                i += cons.length + 2;
-                matched = true;
-                break;
-              }
-            }
-          }
-          if (matched) break;
-        }
-        
-        // Special handling for 'n' and 'M' joins (anusvara)
-        if ((substr === 'n' || substr === 'M') && i + 1 < text.length) {
-          const nextChar = this.getNextConsonant(text, i + 1);
-          if (nextChar && this.nJoinConsonants.some(cons => nextChar.startsWith(cons))) {
-            // Use anusvara (ం) for n-joins and M-joins before certain consonants
+      // Handle visarga ':'
+      if (text[i] === ':') {
+        result += 'ః';
+        i += 1;
+        matched = true;
+      }
+      
+      if (!matched) {
+        // Try to match longer sequences first (up to 4 for kSha)
+        for (let len = 4; len >= 1; len--) {
+          const substr = text.substr(i, len);
+          
+          // Special handling for 'M' at the end of word as anusvara
+          if (substr === 'M' && (i + 1 >= text.length || text[i + 1] === ' ')) {
             result += 'ం';
             i += 1;
             matched = true;
             break;
           }
-        }
-        
-        // Check for consonant + vowel combinations
-        if (len > 1) {
-          for (const [cons, teluguCons] of Object.entries(consonantMap)) {
-            if (substr.startsWith(cons) && substr.length > cons.length) {
-              const vowelPart = substr.substring(cons.length);
-              if (matraMap.hasOwnProperty(vowelPart)) {
-                result += teluguCons + matraMap[vowelPart];
-                i += substr.length;
-                matched = true;
-                break;
-              }
+          
+          // Special handling for R+vowel combinations (dRi -> దృ)
+          if (len >= 3 && substr.startsWith('R') && substr.length >= 2) {
+            const vowelPart = substr.substring(1);
+            if (matraMap.hasOwnProperty(vowelPart)) {
+              result += 'ర్' + matraMap[vowelPart];
+              i += substr.length;
+              matched = true;
+              break;
             }
           }
-          if (matched) break;
-        }
-        
-        // Check for standalone consonants
-        if (consonantMap.hasOwnProperty(substr)) {
-          // Check if next character is a vowel
-          const nextChar = text.substr(i + len, 2);
-          const nextSingleChar = text.substr(i + len, 1);
           
-          if (matraMap.hasOwnProperty(nextChar)) {
-            result += consonantMap[substr] + matraMap[nextChar];
-            i += len + nextChar.length;
-          } else if (matraMap.hasOwnProperty(nextSingleChar)) {
-            result += consonantMap[substr] + matraMap[nextSingleChar];
-            i += len + 1;
-          } else {
-            result += consonantMap[substr] + '్'; // Add halant
-            i += len;
+          // Check for consonant+Ri combinations (dRi -> దృ)
+          if (len >= 3) {
+            for (const [cons, teluguCons] of Object.entries(consonantMap)) {
+              if (substr.startsWith(cons) && substr.length >= cons.length + 2) {
+                const remainder = substr.substring(cons.length);
+                if (remainder.startsWith('Ri')) {
+                  result += teluguCons + 'ృ';
+                  i += cons.length + 2;
+                  matched = true;
+                  break;
+                }
+              }
+            }
+            if (matched) break;
           }
-          matched = true;
-          break;
-        }
-        
-        // Check for standalone vowels
-        if (vowelMap.hasOwnProperty(substr)) {
-          result += vowelMap[substr];
-          i += len;
-          matched = true;
-          break;
+          
+          // Special handling for 'n' and 'M' joins (anusvara)
+          if ((substr === 'n' || substr === 'M') && i + 1 < text.length) {
+            const nextChar = this.getNextConsonant(text, i + 1);
+            if (nextChar && this.nJoinConsonants.some(cons => nextChar.startsWith(cons))) {
+              // Use anusvara (ం) for n-joins and M-joins before certain consonants
+              result += 'ం';
+              i += 1;
+              matched = true;
+              break;
+            }
+          }
+          
+          // Check for consonant + vowel combinations
+          if (len > 1) {
+            for (const [cons, teluguCons] of Object.entries(consonantMap)) {
+              if (substr.startsWith(cons) && substr.length > cons.length) {
+                const vowelPart = substr.substring(cons.length);
+                if (matraMap.hasOwnProperty(vowelPart)) {
+                  result += teluguCons + matraMap[vowelPart];
+                  i += substr.length;
+                  matched = true;
+                  break;
+                }
+              }
+            }
+            if (matched) break;
+          }
+          
+          // Check for standalone consonants
+          if (consonantMap.hasOwnProperty(substr)) {
+            // Check if next character is a vowel
+            const nextChar = text.substr(i + len, 2);
+            const nextSingleChar = text.substr(i + len, 1);
+            
+            if (matraMap.hasOwnProperty(nextChar)) {
+              result += consonantMap[substr] + matraMap[nextChar];
+              i += len + nextChar.length;
+            } else if (matraMap.hasOwnProperty(nextSingleChar)) {
+              result += consonantMap[substr] + matraMap[nextSingleChar];
+              i += len + 1;
+            } else {
+              result += consonantMap[substr] + '్'; // Add halant
+              i += len;
+            }
+            matched = true;
+            break;
+          }
+          
+          // Check for standalone vowels
+          if (vowelMap.hasOwnProperty(substr)) {
+            result += vowelMap[substr];
+            i += len;
+            matched = true;
+            break;
+          }
         }
       }
       
