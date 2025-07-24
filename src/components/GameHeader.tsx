@@ -48,8 +48,8 @@ export const GameHeader = ({
           </div>
         </div>
 
-        {/* Color Legend */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-4 text-xs">
+        {/* Color Legend - Only show on mobile */}
+        <div className="grid grid-cols-2 gap-2 mb-4 text-xs lg:hidden">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 bg-correct rounded-sm"></div>
             <span className="text-muted-foreground">All OK</span>
