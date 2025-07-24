@@ -8,6 +8,20 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
+// Helper function to format date as DD-MMM-YYYY
+const formatDate = (date: Date): string => {
+  const monthNames = [
+    'JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN',
+    'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'
+  ];
+  
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
+  
+  return `${day}-${month}-${year}`;
+};
+
 export const TeluguWordle = () => {
   const [guesses, setGuesses] = useState<string[][]>([]);
   const [currentGuess, setCurrentGuess] = useState<string[]>([]);
@@ -15,7 +29,7 @@ export const TeluguWordle = () => {
   const [won, setWon] = useState(false);
   const [gameMode, setGameMode] = useState('NORMAL');
   const [gameLevel, setGameLevel] = useState('AMATEUR');
-  const [currentDate, setCurrentDate] = useState(new Date().toLocaleDateString());
+  const [currentDate, setCurrentDate] = useState(formatDate(new Date()));
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [hintMessage, setHintMessage] = useState<string>('');
@@ -114,7 +128,7 @@ export const TeluguWordle = () => {
       
       days.push({
         date,
-        displayDate: `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}(${dayName})`
+        displayDate: `${formatDate(date)} (${dayName})`
       });
     }
     
@@ -124,7 +138,7 @@ export const TeluguWordle = () => {
   const handleHistorySelect = (date: Date) => {
     setSelectedDate(date);
     setGameMode('HISTORY');
-    setCurrentDate(date.toLocaleDateString());
+    setCurrentDate(formatDate(date));
     setGuesses([]);
     setCurrentGuess([]);
     setGameOver(false);
@@ -134,7 +148,7 @@ export const TeluguWordle = () => {
     
     toast({
       title: "History Mode",
-      description: `Playing puzzle from ${date.toLocaleDateString()}`,
+      description: `Playing puzzle from ${formatDate(date)}`,
       variant: "default"
     });
   };
@@ -142,7 +156,7 @@ export const TeluguWordle = () => {
   const handleBackToToday = () => {
     setSelectedDate(null);
     setGameMode('NORMAL');
-    setCurrentDate(new Date().toLocaleDateString());
+    setCurrentDate(formatDate(new Date()));
     setGuesses([]);
     setCurrentGuess([]);
     setGameOver(false);
