@@ -106,11 +106,11 @@ export const TeluguWordle = () => {
         setTimeout(() => setHintMessage(''), 3000);
       }
     } else { // AMATEUR level
-      if (hasYellowCells()) {
+      if (hasYellowCells() || hasCorrectCells()) {
         setHintMessage(`Word Meaning: ${dailyWord.meaning}`);
         setTimeout(() => setHintMessage(''), 5000);
       } else {
-        setHintMessage("Hint available after getting at least one syllable match (yellow/colored)!");
+        setHintMessage("Hint available after getting at least one syllable match (yellow/green)!");
         setTimeout(() => setHintMessage(''), 3000);
       }
     }
