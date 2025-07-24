@@ -57,6 +57,9 @@ export const InputArea = ({ onSubmit, disabled, hintMessage }: InputAreaProps) =
             onKeyPress={handleKeyPress}
             placeholder="Enter in English for ex: vinOdamu → వినోదము"
             disabled={disabled}
+            autoCapitalize="none"
+            autoComplete="off"
+            spellCheck="false"
             className="bg-background/50 border-border focus:border-primary text-sm"
           />
           

@@ -92,7 +92,7 @@ export const GameHeader = ({
           </Button>
           <Button variant="outline" size="sm" onClick={onToggleLevel}>
             <Settings className="w-4 h-4 mr-2" />
-            Level: {gameLevel}
+            {gameLevel}
           </Button>
         </div>
       </div>

@@ -92,7 +92,8 @@ const matraMap: TransliterationMap = {
   'o': 'ొ',
   'O': 'ో',
   'au': 'ౌ',
-  'ru': 'ృ'
+  'Ri': 'ృ',
+  'RI': 'ౄ'
 };
 
 export class Transliterator {
