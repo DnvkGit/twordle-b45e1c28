@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { GameGrid } from './GameGrid';
 import { InputArea } from './InputArea';
 import { GameHeader } from './GameHeader';
-import { getDailyWord, splitSyllables } from '@/utils/teluguUtils';
+import { getDailyWord, splitSyllables, determineCellState, CellState } from '@/utils/teluguUtils';
 import { toast } from '@/hooks/use-toast';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 export const TeluguWordle = () => {
   const [guesses, setGuesses] = useState<string[][]>([]);
@@ -13,6 +14,7 @@ export const TeluguWordle = () => {
   const [gameMode, setGameMode] = useState('NORMAL');
   const [gameLevel, setGameLevel] = useState('AMATEUR');
   const [currentDate] = useState(new Date().toLocaleDateString());
+  const [hintMessage, setHintMessage] = useState<string>('');
   
   const dailyWord = getDailyWord();
   const answer = splitSyllables(dailyWord.word.replace(/\s/g, ''));
@@ -52,19 +54,47 @@ export const TeluguWordle = () => {
     }
   };
 
+  const hasCorrectCells = (): boolean => {
+    return guesses.some(guess => 
+      guess.some((letter, index) => 
+        determineCellState(guess, answer, index) === 'correct'
+      )
+    );
+  };
+
+  const hasYellowCells = (): boolean => {
+    return guesses.some(guess => 
+      guess.some((letter, index) => {
+        const state = determineCellState(guess, answer, index);
+        return state === 'present' || state === 'pink-light' || state === 'purple' || 
+               state === 'blue-light' || state === 'brown-accent';
+      })
+    );
+  };
+
   const showHint = () => {
-    if (gameLevel === 'PRO' || guesses.length > 0) {
-      toast({
-        title: "Word Meaning",
-        description: dailyWord.meaning,
-        variant: "default"
-      });
-    } else {
-      toast({
-        title: "Hint not available",
-        description: "You need to make at least one guess first!",
-        variant: "destructive"
-      });
+    if (guesses.length === 0) {
+      setHintMessage("You need to make at least one guess first!");
+      setTimeout(() => setHintMessage(''), 3000);
+      return;
+    }
+
+    if (gameLevel === 'PRO') {
+      if (hasCorrectCells()) {
+        setHintMessage(`Word Meaning: ${dailyWord.meaning}`);
+        setTimeout(() => setHintMessage(''), 5000);
+      } else {
+        setHintMessage("Hint available only after getting at least one syllable correct (green)!");
+        setTimeout(() => setHintMessage(''), 3000);
+      }
+    } else { // AMATEUR level
+      if (hasYellowCells()) {
+        setHintMessage(`Word Meaning: ${dailyWord.meaning}`);
+        setTimeout(() => setHintMessage(''), 5000);
+      } else {
+        setHintMessage("Hint available after getting at least one syllable match (yellow/colored)!");
+        setTimeout(() => setHintMessage(''), 3000);
+      }
     }
   };
 
@@ -87,6 +117,17 @@ export const TeluguWordle = () => {
           answer={answer}
           currentRow={guesses.length}
         />
+        
+        {/* Message Area */}
+        {hintMessage && (
+          <div className="max-w-sm mx-auto mt-4">
+            <Alert className="border-primary/20 bg-primary/5">
+              <AlertDescription className="text-center font-telugu">
+                {hintMessage}
+              </AlertDescription>
+            </Alert>
+          </div>
+        )}
         
         {!gameOver && (
           <InputArea
