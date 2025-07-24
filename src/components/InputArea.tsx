@@ -1,6 +1,7 @@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { transliterator } from '@/utils/transliterator';
+import { splitSyllables } from '@/utils/teluguUtils';
 import { useState, useEffect } from 'react';
 
 interface InputAreaProps {
@@ -25,16 +26,16 @@ export const InputArea = ({ onSubmit, disabled }: InputAreaProps) => {
     if (!input.trim() || disabled) return;
     
     const telugu = transliterator.transliterate(input);
-    // For now, we'll split by characters for simplicity
-    // In a full implementation, you'd use the syllable splitting logic
-    const syllables = Array.from(telugu).slice(0, 4);
+    // Use proper syllable splitting for Telugu text
+    const syllables = splitSyllables(telugu);
     
-    // Pad with empty strings if less than 4 syllables
-    while (syllables.length < 4) {
-      syllables.push('');
+    // Take first 4 syllables or pad with empty strings
+    const finalSyllables = syllables.slice(0, 4);
+    while (finalSyllables.length < 4) {
+      finalSyllables.push('');
     }
     
-    onSubmit(syllables);
+    onSubmit(finalSyllables);
     setInput('');
   };
 
