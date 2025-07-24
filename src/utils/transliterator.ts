@@ -131,19 +131,16 @@ export class Transliterator {
           }
         }
         
-        // Check for consonant+R+vowel combinations (dRi -> దృ)
+        // Check for consonant+Ri combinations (dRi -> దృ)
         if (len >= 3) {
           for (const [cons, teluguCons] of Object.entries(consonantMap)) {
-            if (substr.startsWith(cons) && substr.length > cons.length) {
+            if (substr.startsWith(cons) && substr.length >= cons.length + 2) {
               const remainder = substr.substring(cons.length);
-              if (remainder.startsWith('R') && remainder.length > 1) {
-                const vowelPart = remainder.substring(1);
-                if (matraMap.hasOwnProperty(vowelPart)) {
-                  result += teluguCons + '్ర' + matraMap[vowelPart];
-                  i += substr.length;
-                  matched = true;
-                  break;
-                }
+              if (remainder.startsWith('Ri')) {
+                result += teluguCons + 'ృ';
+                i += cons.length + 2;
+                matched = true;
+                break;
               }
             }
           }
