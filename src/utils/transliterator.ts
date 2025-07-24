@@ -28,14 +28,20 @@ const vowelMap: TransliterationMap = {
 const consonantMap: TransliterationMap = {
   'kSha': 'క్ష',
   'x': 'క్ష',
+  'chh': 'ఛ',
+  'Ch': 'ఛ',
+  'jha': 'ఝ',
   'kh': 'ఖ',
   'ch': 'చ',
-  'chh': 'ఛ',
+  'C': 'చ',
+  'c': 'చ',
   'jh': 'ఝ',
+  'ja': 'జ',
   'Th': 'ఠ',
   'Dh': 'ఢ',
   'th': 'థ',
   'dh': 'ధ',
+  'Du': 'డు',
   'ph': 'ఫ',
   'bh': 'భ',
   'gh': 'ఘ',
@@ -97,7 +103,7 @@ export class Transliterator {
     
     let result = '';
     let i = 0;
-    const text = input.toLowerCase();
+    const text = input; // Don't convert to lowercase to preserve case
     
     while (i < text.length) {
       let matched = false;
@@ -106,11 +112,11 @@ export class Transliterator {
       for (let len = 4; len >= 1; len--) {
         const substr = text.substr(i, len);
         
-        // Special handling for 'n' joins
-        if (substr === 'n' && i + 1 < text.length) {
+        // Special handling for 'n' and 'M' joins (anusvara)
+        if ((substr === 'n' || substr === 'M') && i + 1 < text.length) {
           const nextChar = this.getNextConsonant(text, i + 1);
           if (nextChar && this.nJoinConsonants.some(cons => nextChar.startsWith(cons))) {
-            // Use anusvara (ం) for n-joins before certain consonants
+            // Use anusvara (ం) for n-joins and M-joins before certain consonants
             result += 'ం';
             i += 1;
             matched = true;
