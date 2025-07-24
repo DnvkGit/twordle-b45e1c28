@@ -84,7 +84,7 @@ export const InputArea = ({ onSubmit, disabled }: InputAreaProps) => {
       
       <div className="text-center text-sm text-muted-foreground">
         <p>Type Telugu words using English letters</p>
-        <p className="text-xs mt-1">Example: "padam" → "పదం"</p>
+        <p className="text-xs mt-1">Example: "vinOdamu" → "వినోదము"</p>
       </div>
     </div>
   );

@@ -112,6 +112,44 @@ export class Transliterator {
       for (let len = 4; len >= 1; len--) {
         const substr = text.substr(i, len);
         
+        // Special handling for 'M' at the end of word as anusvara
+        if (substr === 'M' && (i + 1 >= text.length || text[i + 1] === ' ')) {
+          result += 'ం';
+          i += 1;
+          matched = true;
+          break;
+        }
+        
+        // Special handling for R+vowel combinations (dRi -> దృ)
+        if (len >= 3 && substr.startsWith('R') && substr.length >= 2) {
+          const vowelPart = substr.substring(1);
+          if (matraMap.hasOwnProperty(vowelPart)) {
+            result += 'ర్' + matraMap[vowelPart];
+            i += substr.length;
+            matched = true;
+            break;
+          }
+        }
+        
+        // Check for consonant+R+vowel combinations (dRi -> దృ)
+        if (len >= 3) {
+          for (const [cons, teluguCons] of Object.entries(consonantMap)) {
+            if (substr.startsWith(cons) && substr.length > cons.length) {
+              const remainder = substr.substring(cons.length);
+              if (remainder.startsWith('R') && remainder.length > 1) {
+                const vowelPart = remainder.substring(1);
+                if (matraMap.hasOwnProperty(vowelPart)) {
+                  result += teluguCons + '్ర' + matraMap[vowelPart];
+                  i += substr.length;
+                  matched = true;
+                  break;
+                }
+              }
+            }
+          }
+          if (matched) break;
+        }
+        
         // Special handling for 'n' and 'M' joins (anusvara)
         if ((substr === 'n' || substr === 'M') && i + 1 < text.length) {
           const nextChar = this.getNextConsonant(text, i + 1);
