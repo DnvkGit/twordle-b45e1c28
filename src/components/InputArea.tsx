@@ -53,13 +53,23 @@ export const InputArea = ({ onSubmit, disabled, hintMessage }: InputAreaProps) =
           <Input
             type="text"
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              let value = e.target.value;
+              // Prevent auto-capitalization by ensuring first character is lowercase
+              if (value.length === 1 && value.charAt(0) !== value.charAt(0).toLowerCase()) {
+                value = value.charAt(0).toLowerCase() + value.slice(1);
+              }
+              setInput(value);
+            }}
             onKeyPress={handleKeyPress}
             placeholder="Enter in English for ex: vinOdamu → వినోదము"
             disabled={disabled}
             autoCapitalize="none"
             autoComplete="off"
+            autoCorrect="off"
             spellCheck="false"
+            inputMode="text"
+            data-gramm="false"
             className="bg-background/50 border-border focus:border-primary text-sm"
           />
           
