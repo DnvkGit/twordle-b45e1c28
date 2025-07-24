@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, HelpCircle, Settings, Trophy } from 'lucide-react';
+import { Calendar, HelpCircle, Settings, Trophy, Check, X } from 'lucide-react';
 
 interface GameHeaderProps {
   gameMode: string;
@@ -49,35 +49,35 @@ export const GameHeader = ({
         </div>
 
         {/* Color Legend - Only show on mobile */}
-        <div className="grid grid-cols-2 gap-2 mb-4 text-xs lg:hidden">
-          <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-1 mb-4 text-xs lg:hidden">
+          <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-correct rounded-sm"></div>
-            <span className="text-muted-foreground">All OK</span>
+            <span className="text-muted-foreground">All <Check className="w-3 h-3 inline text-green-600" /></span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-pink-light rounded-sm"></div>
-            <span className="text-muted-foreground">Pos OK - Gunintam Wrong</span>
+            <span className="text-muted-foreground">Pos <Check className="w-3 h-3 inline text-green-600" /> - Gun <X className="w-3 h-3 inline text-red-600" /></span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-purple rounded-sm"></div>
-            <span className="text-muted-foreground">Pos OK - Samyuktakshara Wrong</span>
+            <span className="text-muted-foreground">Pos <Check className="w-3 h-3 inline text-green-600" /> - Sam <X className="w-3 h-3 inline text-red-600" /></span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-present rounded-sm"></div>
-            <span className="text-muted-foreground">Pos Not OK - Syllable OK</span>
+            <span className="text-muted-foreground">Pos <X className="w-3 h-3 inline text-red-600" /> - Syl <Check className="w-3 h-3 inline text-green-600" /></span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-blue-light rounded-sm"></div>
-            <span className="text-muted-foreground">Pos Not OK - Gunintam Wrong</span>
+            <span className="text-muted-foreground">Pos <X className="w-3 h-3 inline text-red-600" /> - Gun <X className="w-3 h-3 inline text-red-600" /></span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <div className="w-3 h-3 bg-brown-accent rounded-sm"></div>
-            <span className="text-muted-foreground">Pos Not OK - Samyuktakshara Wrong</span>
+            <span className="text-muted-foreground">Pos <X className="w-3 h-3 inline text-red-600" /> - Sam <X className="w-3 h-3 inline text-red-600" /></span>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-wrap gap-2 justify-center">
+        <div className="flex gap-2 justify-center">
           <Button variant="outline" size="sm" onClick={onShowHelp}>
             <HelpCircle className="w-4 h-4 mr-2" />
             Help
@@ -92,7 +92,7 @@ export const GameHeader = ({
           </Button>
           <Button variant="outline" size="sm" onClick={onToggleLevel}>
             <Settings className="w-4 h-4 mr-2" />
-            {gameLevel}
+            Level
           </Button>
         </div>
       </div>
