@@ -175,32 +175,8 @@ export const TeluguWordle = () => {
             <InputArea
               onSubmit={handleSubmitGuess}
               disabled={gameOver}
+              hintMessage={hintMessage}
             />
-            
-            {/* Hint Area - positioned near input to avoid scrolling */}
-            {(hasCorrectCells() || hasYellowCells()) && (
-              <div className="text-center mt-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={showHint}
-                  className="text-xs py-1 px-2"
-                >
-                  💡 Hint?
-                </Button>
-              </div>
-            )}
-            
-            {/* Message Area - also near input */}
-            {hintMessage && (
-              <div className="max-w-xs mx-auto mt-2">
-                <Alert className="border-primary/20 bg-primary/5 p-2">
-                  <AlertDescription className="text-center font-telugu text-xs">
-                    {hintMessage}
-                  </AlertDescription>
-                </Alert>
-              </div>
-            )}
           </div>
         )}
 

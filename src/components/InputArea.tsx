@@ -7,9 +7,10 @@ import { useState, useEffect } from 'react';
 interface InputAreaProps {
   onSubmit: (syllables: string[]) => void;
   disabled: boolean;
+  hintMessage?: string;
 }
 
-export const InputArea = ({ onSubmit, disabled }: InputAreaProps) => {
+export const InputArea = ({ onSubmit, disabled, hintMessage }: InputAreaProps) => {
   const [input, setInput] = useState('');
   const [teluguPreview, setTeluguPreview] = useState('');
 
@@ -62,6 +63,14 @@ export const InputArea = ({ onSubmit, disabled }: InputAreaProps) => {
           {teluguPreview && (
             <div className="bg-background/30 rounded p-2 border border-border">
               <p className="font-telugu text-lg text-foreground">{teluguPreview}</p>
+            </div>
+          )}
+          
+          {hintMessage && (
+            <div className="bg-primary/10 rounded p-2 border border-primary/20">
+              <p className="font-telugu text-xs text-center text-primary">
+                {hintMessage}
+              </p>
             </div>
           )}
           
